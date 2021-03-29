@@ -67,7 +67,4 @@ echo "Keep these credentials for future use"
 
 rm temp
 
-rm -rf microservices-demo
-git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
-cd microservices-demo
-kubectl apply -f ./release/kubernetes-manifests.yaml
+kubectl apply -f https://gist.githubusercontent.com/AnaMMedina21/d45fe777b4db356d271c0d9b229978f7/raw/cbb821037be75ff9ca7aed4d049b324e7f77be5f/boutique-shop.yaml
