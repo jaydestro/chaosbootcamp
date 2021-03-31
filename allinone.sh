@@ -36,7 +36,8 @@ echo "Creating cluster, this could take a few mins"
 az aks create --resource-group $GROUPNAME --name $AKSNAME \
 --enable-addons monitoring,http_application_routing \
 --kubernetes-version $k8sversion  --generate-ssh-keys \
---service-principal $APPID --client-secret $PASS
+--service-principal $APPID --client-secret $PASS \
+--node-count 1
 
 # get the aks cluster pass for kubectl access
 
@@ -47,17 +48,6 @@ echo "cluster creds for are imported"
 # create an azure container registry for images, admin enabled for docker login
 
 az acr create --resource-group $GROUPNAME --name $ACRNAME --sku Standard --admin-enabled true
-
-# creating RBAC for Azure AD to permit build and pull from acr to aks cluster
-
-# Get the id of the service principal configured for AKS
-CLIENT_ID=$(az aks show  --resource-group $GROUPNAME --name $AKSNAME --query "servicePrincipalProfile.clientId" --output tsv)
-
- # Get the ACR registry resource id
-ACR_ID=$(az acr show  --name $ACRNAME --resource-group $GROUPNAME --query "id" --output tsv)
-
-# Create role assignment
-az role assignment create  --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 
 echo "your cluster is now ready to use, check the portal for more details"
 
